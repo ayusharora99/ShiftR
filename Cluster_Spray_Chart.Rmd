@@ -1,0 +1,346 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+
+library(dplyr)
+library(ggplot2)
+```
+
+
+```{r}
+#Cluster_Means = read.csv('~/Documents/Wake_Forest/Cluster_Means_Bearing.csv')
+cluster_0 <- read.csv("~/Documents/Baseball_Cloud/cluster_0.csv")
+cluster_1 <- read.csv("~/Documents/Baseball_Cloud/cluster_1.csv")
+cluster_2 <- read.csv("~/Documents/Baseball_Cloud/cluster_2.csv")
+cluster_3 <- read.csv("~/Documents/Baseball_Cloud/cluster_3.csv")
+cluster_4 <- read.csv("~/Documents/Baseball_Cloud/cluster_4.csv")
+cluster_5 <- read.csv("~/Documents/Baseball_Cloud/cluster_5.csv")
+cluster_6 <- read.csv("~/Documents/Baseball_Cloud/cluster_6.csv")
+cluster_means <- read.csv("~/Documents/Baseball_Cloud/cluster_means.csv")
+clusters  <- read.csv("~/Documents/Baseball_Cloud/clusters.csv")
+
+traditional_cluster_0 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_0.csv")
+traditional_cluster_1 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_1.csv")
+traditional_cluster_2 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_2.csv")
+traditional_cluster_3 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_3.csv")
+traditional_cluster_4 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_4.csv")
+traditional_cluster_5 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_5.csv")
+traditional_cluster_6 <- read.csv("~/Documents/Baseball_Cloud/traditional_cluster_6.csv")
+traditional_cluster_means <-  read.csv("~/Documents/Baseball_Cloud/traditional_cluster_means.csv")
+traditional_clusters  <- read.csv("~/Documents/Baseball_Cloud/traditional_clusters.csv")
+
+custom_cluster_means <- read.csv("~/Documents/Baseball_Cloud/custom_cluster_means.csv")
+custom_clusters <- read.csv("~/Documents/Baseball_Cloud/custom_clusters.csv")
+#first_base <- read.csv("~/Documents/Baseball_Cloud/first_base.csv")
+
+college_traditional <- read.csv("~/Documents/Baseball_Cloud/training_data_with_hit_prob.csv")
+#statcast_traditional  <- read.csv("~/Documents/Baseball_Cloud/statcast_traditional.csv")
+#cluster_7 <- read.csv("~/Documents/Wake_Forest/cluster_7.csv")
+#cluster_8 <- read.csv("~/Documents/Wake_Forest/cluster_8.csv")
+#cluster_9 <- read.csv("~/Documents/Wake_Forest/cluster_9.csv")
+
+```
+
+```{r}
+#Cluster_Means$hc_x = tan((Cluster_Means$Bearing)*(pi/180)) * Cluster_Means$Last.Tracked.Distance
+#Cluster_Means$hc_y = Cluster_Means$Last.Tracked.Distance
+
+cluster_0$hc_x = tan((cluster_0$direction)*(pi/180)) * cluster_0$distance
+cluster_0$hc_y = cluster_0$distance
+
+cluster_1$hc_x = tan((cluster_1$direction)*(pi/180)) * cluster_1$distance
+cluster_1$hc_y = cluster_1$distance
+
+cluster_2$hc_x = tan((cluster_2$direction)*(pi/180)) * cluster_2$distance
+cluster_2$hc_y = cluster_2$distance
+
+cluster_3$hc_x = tan((cluster_3$direction)*(pi/180)) * cluster_3$distance
+cluster_3$hc_y = cluster_3$distance
+
+cluster_4$hc_x = tan((cluster_4$direction)*(pi/180)) * cluster_4$distance
+cluster_4$hc_y = cluster_4$distance
+
+cluster_5$hc_x = tan((cluster_5$direction)*(pi/180)) * cluster_5$distance
+cluster_5$hc_y = cluster_5$distance
+
+cluster_6$hc_x = tan((cluster_6$direction)*(pi/180)) * cluster_6$distance
+cluster_6$hc_y = cluster_6$distance
+
+cluster_means$hc_x = tan((cluster_means$direction)*(pi/180)) * cluster_means$distance
+cluster_means$hc_y = cluster_means$distance
+
+custom_cluster_means$hc_x = tan((custom_cluster_means$direction)*(pi/180)) * custom_cluster_means$distance
+custom_cluster_means$hc_y = custom_cluster_means$distance
+
+custom_clusters$hc_x = tan((custom_clusters$direction)*(pi/180)) * custom_clusters$distance
+custom_clusters$hc_y = custom_clusters$distance
+
+clusters$hc_x = tan((clusters$direction)*(pi/180)) * clusters$distance
+clusters$hc_y = clusters$distance
+
+#first_base$hc_x = tan((first_base$direction)*(pi/180)) * first_base$distance
+first_base$hc_y = first_base$distance
+
+traditional_cluster_0$hc_x = tan((traditional_cluster_0$direction)*(pi/180)) * traditional_cluster_0$distance
+traditional_cluster_0$hc_y = traditional_cluster_0$distance
+
+traditional_cluster_1$hc_x = tan((traditional_cluster_1$direction)*(pi/180)) * traditional_cluster_1$distance
+traditional_cluster_1$hc_y = traditional_cluster_1$distance
+
+traditional_cluster_2$hc_x = tan((traditional_cluster_2$direction)*(pi/180)) * traditional_cluster_2$distance
+traditional_cluster_2$hc_y = traditional_cluster_2$distance
+
+traditional_cluster_3$hc_x = tan((traditional_cluster_3$direction)*(pi/180)) * traditional_cluster_3$distance
+traditional_cluster_3$hc_y = traditional_cluster_3$distance
+
+traditional_cluster_4$hc_x = tan((traditional_cluster_4$direction)*(pi/180)) * traditional_cluster_4$distance
+traditional_cluster_4$hc_y = traditional_cluster_4$distance
+
+traditional_cluster_5$hc_x = tan((traditional_cluster_5$direction)*(pi/180)) * traditional_cluster_5$distance
+traditional_cluster_5$hc_y = traditional_cluster_5$distance
+
+traditional_cluster_6$hc_x = tan((traditional_cluster_6$direction)*(pi/180)) * traditional_cluster_6$distance
+traditional_cluster_6$hc_y = traditional_cluster_6$distance
+
+traditional_cluster_means$hc_x = tan((traditional_cluster_means$direction)*(pi/180)) * traditional_cluster_means$distance
+traditional_cluster_means$hc_y = traditional_cluster_means$distance
+
+traditional_clusters$hc_x = tan((traditional_clusters$direction)*(pi/180)) * traditional_clusters$distance
+traditional_clusters$hc_y = traditional_clusters$distance
+
+college_traditional$hc_x = tan((college_traditional$direction)*(pi/180)) * college_traditional$distance
+college_traditional$hc_y = college_traditional$distance
+
+#statcast_traditional$hc_x = tan((statcast_traditional$direction)*(pi/180)) * statcast_traditional$distance
+#statcast_traditional$hc_y = statcast_traditional$distance
+
+
+#cluster_7$hc_x = tan((cluster_7$direction)*(pi/180)) * cluster_7$distance
+#cluster_7$hc_y = cluster_7$distance
+
+#cluster_8$hc_x = tan((cluster_8$direction)*(pi/180)) * cluster_8$distance
+#cluster_8$hc_y = cluster_8$distance
+
+#cluster_9$hc_x = tan((cluster_9$direction)*(pi/180)) * cluster_9$distance
+#cluster_9$hc_y = cluster_9$distance
+```
+
+
+
+```{r}
+#spray_chart = function(...){
+#  ggplot(...) + 
+#    geom_curve(x = -225, xend = 225, y = 310, yend = 300, curvature = -0.45) + 
+#    geom_segment(x = -225, xend = 0, y = 310, yend = 0) +
+#    geom_segment(x =  225, xend = 0, y = 300, yend = 0) + 
+#    geom_curve(x = -65, xend = 65, y = 95, yend = 95, curvature = -0.50, linetype = "dotted") +
+#    coord_fixed() +
+#    scale_x_continuous(NULL, limits = c(-300,300)) + 
+#    scale_y_continuous(NULL, limits = c(-25,500))
+#}
+
+spray_chart = function(...){
+
+  ggplot(...) + 
+
+    geom_curve(x = -270, xend = 260, y = 310, yend = 305, curvature = -0.45) + 
+
+    geom_segment(x = -270, xend = 0, y = 310, yend = 0) +
+
+    geom_segment(x =  260, xend = 0, y = 310, yend = 0) + 
+
+    geom_curve(x = -70, xend = 70, y = 95, yend = 95, curvature = -0.50, linetype = "dotted") +
+
+    coord_fixed() +
+
+   scale_x_continuous(NULL, limits = c(-300,300)) + 
+
+   scale_y_continuous(NULL, limits = c(-25,500))
+
+}
+```
+
+```{r}
+clusters_chart = spray_chart(clusters, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  ggtitle('Clusters Spray Chart')
+
+ggsave("clusters_spray_chart.png")
+clusters_chart
+```
+
+```{r}
+#clusters_chart = spray_chart(first_base, aes(x = hc_x, y = hc_y)) +
+#  geom_point()+
+#  ggtitle('Clusters Spray Chart')
+
+#ggsave("clusters_spray_chart.png")
+#clusters_chart
+```
+```{r}
+#statcast_chart = spray_chart(statcast_traditional, aes(x = hc_x, y = hc_y)) +
+#  stat_ellipse(aes(group = hit_location))
+#  ggtitle('Statcast Tradtional Fielding')
+
+#ggsave("statcast_chart.png")
+#statcast_chart
+```
+
+```{r}
+#traditional_clusters_chart = spray_chart(traditional_clusters, aes(x = hc_x, y = hc_y, color = play_result)) +
+#  geom_point()+
+#  stat_ellipse(aes(group = traditional_cluster))
+#  ggtitle('Traditional Clusters Spray Chart')
+
+#ggsave("traditional_clusters_spray_chart.png")
+#traditional_clusters_chart
+```
+```{r}
+clusters_chart = spray_chart(college_traditional %>% filter(batter_name == 'Seymour, Bobby'), aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  stat_ellipse(data = . %>% filter(traditional_cluster != 0),
+               aes(group = traditional_cluster))
+  ggtitle('Clusters Spray Chart')
+
+ggsave("clusters_spray_chart.png")
+clusters_chart
+```
+
+
+```{r}
+clusters_chart = spray_chart(clusters, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  stat_ellipse(aes(group = cluster))
+  ggtitle('Clusters Spray Chart')
+
+ggsave("clusters_spray_chart.png")
+clusters_chart
+```
+```{r}
+custom_clusters_chart = spray_chart(custom_clusters, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  stat_ellipse(aes(group = custom_cluster))
+  ggtitle('Custom Clusters Spray Chart')
+
+ggsave("custom_clusters_spray_chart.png")
+custom_clusters_chart
+```
+
+```{r}
+#clusters_chart = spray_chart(college_traditional, aes(x = hc_x, y = hc_y)) +
+#  stat_ellipse(data = . %>% filter(traditional_cluster != 0),
+#               aes(group = traditional_cluster)) +
+#  ggtitle('Clusters Spray Chart')
+
+#ggsave("clusters_spray_chart.png")
+#clusters_chart
+```
+
+
+
+
+
+```{r}
+cluster_0_chart = spray_chart(cluster_0, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 0 Spray Chart')
+
+ggsave("cluster_0_spray_chart.png")
+cluster_0_chart
+ 
+# List % of balls in Cluster 0 / All clusters
+# List hit prob of balls in Cluster 0 as hits / hits + outs 
+```
+
+```{r}
+cluster_1_chart = spray_chart(cluster_1, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 1 Spray Chart')
+ggsave("cluster_1_spray_chart.png")
+cluster_1_chart
+```
+
+```{r}
+cluster_2_chart = spray_chart(cluster_2, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 2 Spray Chart')
+ggsave("cluster_2_spray_chart.png")
+cluster_2_chart
+```
+
+```{r}
+cluster_3_chart = spray_chart(cluster_3, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 3 Spray Chart')
+ggsave("cluster_3_spray_chart.png")
+cluster_3_chart
+```
+
+```{r}
+cluster_4_chart = spray_chart(cluster_4, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 4 Spray Chart')
+ggsave("cluster_4_spray_chart.png")
+cluster_4_chart
+```
+
+```{r}
+cluster_5_chart = spray_chart(cluster_5, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 5 Spray Chart')
+ggsave("cluster_5_spray_chart.png")
+cluster_5_chart
+```
+
+```{r}
+cluster_6_chart = spray_chart(cluster_6, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 6 Spray Chart')
+ggsave("cluster_6_spray_chart.png")
+cluster_6_chart
+```
+```{r}
+trad_cluster_6_chart = spray_chart(traditional_cluster_3, aes(x = hc_x, y = hc_y, color = play_result)) +
+  geom_point()+
+  ggtitle('Cluster 6 Spray Chart')
+#ggsave("cluster_6_spray_chart.png")
+trad_cluster_6_chart
+```
+
+```{r}
+cluster_means_chart = spray_chart(cluster_means, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  ggtitle('Shift Against Bobby Seymour')
+ggsave("cluster_means.png")
+cluster_means_chart
+```
+```{r}
+custom_cluster_means_chart = spray_chart(custom_cluster_means, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  ggtitle('Custom Cluster against Bobby Seymour')
+ggsave("custom_cluster_means.png")
+custom_cluster_means_chart
+```
+
+
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
