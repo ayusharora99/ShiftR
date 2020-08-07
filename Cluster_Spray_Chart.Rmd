@@ -50,6 +50,9 @@ college_traditional <- read.csv("~/Documents/Baseball_Cloud/training_data_with_h
 #cluster_8 <- read.csv("~/Documents/Wake_Forest/cluster_8.csv")
 #cluster_9 <- read.csv("~/Documents/Wake_Forest/cluster_9.csv")
 
+traditional_field <- read.csv("~/Documents/Baseball_Cloud/traditional_field.csv") 
+
+final_shift <- read.csv("~/Documents/Baseball_Cloud/Final_Shift.csv")
 ```
 
 ```{r}
@@ -122,6 +125,11 @@ traditional_clusters$hc_y = traditional_clusters$distance
 college_traditional$hc_x = tan((college_traditional$direction)*(pi/180)) * college_traditional$distance
 college_traditional$hc_y = college_traditional$distance
 
+traditional_field$hc_x = tan((traditional_field$direction)*(pi/180)) * traditional_field$distance
+traditional_field$hc_y = traditional_field$distance
+
+final_shift$hc_x = tan((final_shift$direction)*(pi/180)) * final_shift$distance
+final_shift$hc_y = final_shift$distance
 #statcast_traditional$hc_x = tan((statcast_traditional$direction)*(pi/180)) * statcast_traditional$distance
 #statcast_traditional$hc_y = statcast_traditional$distance
 
@@ -171,6 +179,16 @@ spray_chart = function(...){
 }
 ```
 
+Traditional Field Mean points with Batter BIP and clusters around traditional positioning
+
+
+
+
+
+Shifted Field Mean points with Batter BIP and clusters around shifted positioning
+
+
+
 ```{r}
 clusters_chart = spray_chart(clusters, aes(x = hc_x, y = hc_y)) +
   geom_point()+
@@ -206,6 +224,7 @@ clusters_chart
 #ggsave("traditional_clusters_spray_chart.png")
 #traditional_clusters_chart
 ```
+
 ```{r}
 clusters_chart = spray_chart(college_traditional %>% filter(batter_name == 'Seymour, Bobby'), aes(x = hc_x, y = hc_y, color = play_result)) +
   geom_point()+
@@ -221,28 +240,28 @@ clusters_chart
 ```{r}
 clusters_chart = spray_chart(clusters, aes(x = hc_x, y = hc_y, color = play_result)) +
   geom_point()+
-  stat_ellipse(aes(group = cluster))
+  stat_ellipse(aes(group = custom_cluster))
   ggtitle('Clusters Spray Chart')
 
 ggsave("clusters_spray_chart.png")
 clusters_chart
 ```
 ```{r}
-custom_clusters_chart = spray_chart(custom_clusters, aes(x = hc_x, y = hc_y)) +
+clusters_chart = spray_chart(clusters, aes(x = hc_x, y = hc_y, color = play_result)) +
   geom_point()+
-  stat_ellipse(aes(group = custom_cluster))
-  ggtitle('Custom Clusters Spray Chart')
+  stat_ellipse(aes(group = scikit_cluster))
+  ggtitle('Clusters Spray Chart')
 
-ggsave("custom_clusters_spray_chart.png")
-custom_clusters_chart
+ggsave("clusters_spray_chart.png")
+clusters_chart
 ```
 
 ```{r}
-#clusters_chart = spray_chart(college_traditional, aes(x = hc_x, y = hc_y)) +
+#clusters_chart = spray_chart(college_traditional, aes(x = hc_x, y = hc_y, color = traditional_cluster)) +
+#  geom_point()+
 #  stat_ellipse(data = . %>% filter(traditional_cluster != 0),
 #               aes(group = traditional_cluster)) +
 #  ggtitle('Clusters Spray Chart')
-
 #ggsave("clusters_spray_chart.png")
 #clusters_chart
 ```
@@ -317,6 +336,13 @@ trad_cluster_6_chart = spray_chart(traditional_cluster_3, aes(x = hc_x, y = hc_y
 #ggsave("cluster_6_spray_chart.png")
 trad_cluster_6_chart
 ```
+```{r}
+traditional_field_chart = spray_chart(traditional_field, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  ggtitle('Traditional Field Against Bobby Seymour')
+ggsave("traditional_field.png")
+traditional_field_chart
+```
 
 ```{r}
 cluster_means_chart = spray_chart(cluster_means, aes(x = hc_x, y = hc_y)) +
@@ -333,6 +359,13 @@ ggsave("custom_cluster_means.png")
 custom_cluster_means_chart
 ```
 
+```{r}
+final_shift_chart = spray_chart(final_shift, aes(x = hc_x, y = hc_y)) +
+  geom_point()+
+  ggtitle('Final shift against Austin Martin')
+ggsave("final_shift.png")
+final_shift_chart
+```
 
 
 
