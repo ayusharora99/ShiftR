@@ -260,7 +260,7 @@ clusters_chart
 #clusters_chart = spray_chart(college_traditional, aes(x = hc_x, y = hc_y, color = traditional_cluster)) +
 #  geom_point()+
 #  stat_ellipse(data = . %>% filter(traditional_cluster != 0),
-#               aes(group = traditional_cluster)) +
+#              aes(group = traditional_cluster)) +
 #  ggtitle('Clusters Spray Chart')
 #ggsave("clusters_spray_chart.png")
 #clusters_chart
